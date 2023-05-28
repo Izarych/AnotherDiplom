@@ -1,0 +1,87 @@
+const addButton = document.getElementById('addbtn');
+addButton.addEventListener('click', sendData);
+
+async function sendData() {
+    const latitude = document.getElementById('latitude').value;
+    const longitude = document.getElementById('longitude').value;
+    const content = document.getElementById('content').value;
+
+    const data = {
+        latitude,
+        longitude,
+        content
+    }
+
+    await fetch('http://localhost:3000', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+
+    location.reload();
+}
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    let map = L.map('map').setView([52.417, 34.794], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; OpenStreetMap contributors',
+        maxZoom: 18,
+    }).addTo(map);
+
+    let canDates = [
+    ]
+
+    fetch('http://localhost:3000')
+      .then(response => response.json())
+      .then(data => {
+          data.forEach(async (can) => {
+              if (!canDates.includes({can: can.id})) {
+                  canDates.push({can: can.id, updateDate: new Date(can.createdAt)})
+              }
+              const obj = canDates.find(obj => obj.can === can.id);
+              if (can.content < 8) {
+                  if (dayDiff(new Date(), obj.updateDate)) {
+                      obj.updateDate.setDate(obj.updateDate.getDate() + 1);
+                      await updateContent(can.id, getRandom(2, 1))
+                  }
+              }
+              let marker = L.marker([can.latitude, can.longitude]).addTo(map);
+              marker.bindPopup('<div class="cont">' + `Номер контейнера: ${can.id}` + '</div>' +
+              '<div class="cont">' + `Объем мусора (в куб.м.): ${can.content}` + '</div>' +
+                (can.content >= 8 ? '<div class="cont">Контейнер заполнен</div>' : ''))
+
+              if (can.content >= 8) {
+                  if (dayDiff(new Date(), obj.updateDate)) {
+                      await updateContent(can.id, -can.content);
+                  }
+              }
+          })
+      })
+    function getRandom(max, min) {
+        return Math.round(Math.random() * (max - min) + min);
+    }
+
+    function minDiff(firstDate, secondDate) {
+        const diff = Math.abs(firstDate - secondDate);
+        const msInMinute = 60 * 1000;
+        return diff >= msInMinute && diff
+    } // Потом удалить
+
+    function dayDiff(firstDate, secondDate) {
+        const diff = Math.abs(firstDate - secondDate);
+        const msInDay = 24 * 60 * 60 * 1000;
+        return diff >= msInDay && diff < msInDay * 2;
+    }
+
+    async function updateContent(id, num) {
+        return await fetch(`http://localhost:3000/${id}/${num}`, {
+            method: 'PUT'
+        })
+    }
+
+})
