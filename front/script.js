@@ -4,7 +4,9 @@ addButton.addEventListener('click', sendData);
 async function sendData() {
     const latitude = document.getElementById('latitude').value;
     const longitude = document.getElementById('longitude').value;
-    const content = document.getElementById('content').value;
+    let content = document.getElementById('content').value;
+    //!!! Обработка ошибки если пользователь вводит очень большое число, тогда число сбрасывается на 8
+    if (content > 8) content = 8;
 
     const data = {
         latitude,
@@ -33,26 +35,32 @@ document.addEventListener('DOMContentLoaded', () => {
         maxZoom: 18,
     }).addTo(map);
 
-    let canDates = [
-    ]
+    let canDates = []
 
     fetch('http://localhost:3000')
       .then(response => response.json())
       .then(data => {
           data.forEach(async (can) => {
               if (!canDates.includes({can: can.id})) {
-                  canDates.push({can: can.id, updateDate: new Date(can.createdAt)})
+                  canDates.push({can: can.id, updateDate: new Date(can.updatedAt)})
               }
               const obj = canDates.find(obj => obj.can === can.id);
               if (can.content < 8) {
                   if (dayDiff(new Date(), obj.updateDate)) {
-                      obj.updateDate.setDate(obj.updateDate.getDate() + 1);
                       await updateContent(can.id, getRandom(2, 1))
                   }
               }
+              //!!! Добавлена дата обновления данных
+              const year = obj.updateDate.getFullYear();
+              const month = obj.updateDate.getMonth() + 1;
+              const day = obj.updateDate.getDate();
+              const formattedDate = `${year} - ${month} - ${day}`;
+
               let marker = L.marker([can.latitude, can.longitude]).addTo(map);
               marker.bindPopup('<div class="cont">' + `Номер контейнера: ${can.id}` + '</div>' +
-              '<div class="cont">' + `Объем мусора (в куб.м.): ${can.content}` + '</div>' +
+                (can.content === 0 ? '<div class="cont">' + 'Контейнер пуст' + '</div>' : '<div class="cont">' + `Объём мусора (в куб.м.): ${can.content.toString()}` + '</div>')
+                +
+                '<div class="cont">' + `Последнее обновление данных: ${formattedDate}` + '</div>' +
                 (can.content >= 8 ? '<div class="cont">Контейнер заполнен</div>' : ''))
 
               if (can.content >= 8) {
@@ -69,13 +77,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function minDiff(firstDate, secondDate) {
         const diff = Math.abs(firstDate - secondDate);
         const msInMinute = 60 * 1000;
-        return diff >= msInMinute && diff
+        return diff >= msInMinute
     } // Потом удалить
 
     function dayDiff(firstDate, secondDate) {
-        const diff = Math.abs(firstDate - secondDate);
-        const msInDay = 24 * 60 * 60 * 1000;
-        return diff >= msInDay && diff < msInDay * 2;
+        secondDate.setDate(secondDate.getDate() + 1);
+        return firstDate > secondDate;
     }
 
     async function updateContent(id, num) {

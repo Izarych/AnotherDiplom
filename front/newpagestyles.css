@@ -1,0 +1,87 @@
+.containerChange {
+    position: relative;
+    margin-top: 50px;
+    text-align: center;
+}
+
+#message {
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.success {
+    background-color: #c2e0c6;
+    color: #138d3b;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+#newpage {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #efefef;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+}
+
+#newpage:hover {
+    background-color: #ccc;
+}
+
+.containerDelete {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.containerDelete input {
+    margin-bottom: 10px;
+    padding: 5px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.containerDelete button {
+    padding: 8px 16px;
+    background-color: #efa232;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.containerDelete button:hover {
+    background-color: #f89405;
+}
+
+.containerChange input[type="number"] {
+    margin-bottom: 10px;
+    padding: 5px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.containerChange button#changeBtn {
+    padding: 8px 16px;
+    background-color: #efa232;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.containerChange button#changeBtn:hover {
+    background-color: #f89405;
+}

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Cans } from './cans.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { CansDto } from './dto/cans.dto';
@@ -15,12 +15,32 @@ export class AppService {
   async createCan(cansDto : CansDto) : Promise<Cans> {
     return this.cansRepository.create(cansDto);
   }
-
+ // !!!!
   async updateCan(id: number, num: number) {
     const can = await this.cansRepository.findByPk(id);
-    const content: number = can.content += Number(num);
+    let content: number = can.content += Number(num);
+    if (content < 0) content = 0;
     await can.update({content: content})
-    await can.save();
     return can.content;
+  }
+
+  async changeCan(id: number, num: number) {
+    const can = await this.cansRepository.findByPk(id);
+    if (!can) {
+      throw new NotFoundException(`Контейнера с номером ${id} не существует`)
+    }
+    await can.update({content: num})
+    return can;
+  }
+
+  async deleteCan(id: number) {
+    const can = await this.cansRepository.findByPk(id);
+    if (!can) {
+      throw new NotFoundException(`Контейнера с номером ${id} не существует`)
+    }
+    await can.destroy();
+    return {
+      message: 'Контейнер был успешно удален'
+    }
   }
 }

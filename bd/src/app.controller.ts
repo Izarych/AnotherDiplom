@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Cans } from './cans.model';
 import { CansDto } from './dto/cans.dto';
@@ -8,17 +8,27 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  async getAll() : Promise<Cans[]> {
+  getAll() : Promise<Cans[]> {
     return this.appService.getAllCans();
   }
 
   @Post()
-  async create(@Body() canDto: CansDto) : Promise<Cans> {
+  create(@Body() canDto: CansDto) : Promise<Cans> {
     return this.appService.createCan(canDto);
   }
 
   @Put(':id/:number')
-  async updateCan(@Param('id') id: number, @Param('number') num: number) {
+  updateCan(@Param('id') id: number, @Param('number') num: number) {
     return this.appService.updateCan(id, num);
+  }
+
+  @Put('/change/:id/:num')
+  changeCan(@Param('id') id: number, @Param('num') num: number) {
+    return this.appService.changeCan(id, num);
+  }
+
+  @Delete(':id')
+  deleteCan(@Param('id') id: number) {
+    return this.appService.deleteCan(id);
   }
 }
