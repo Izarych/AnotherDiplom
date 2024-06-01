@@ -18,17 +18,17 @@ export class AppController {
   }
 
   @Put(':id/:number')
-  updateCan(@Param('id') id: number, @Param('number') num: number) {
+  updateCan(@Param('id') id: number, @Param('number') num: number): Promise<number> {
     return this.appService.updateCan(id, num);
   }
 
   @Put('/change/:id/:num')
-  changeCan(@Param('id') id: number, @Param('num') num: number) {
+  changeCan(@Param('id') id: number, @Param('num') num: number): Promise<Cans> {
     return this.appService.changeCan(id, num);
   }
 
   @Delete(':id')
-  deleteCan(@Param('id') id: number) {
+  deleteCan(@Param('id') id: number): Promise<{message:string}> {
     return this.appService.deleteCan(id);
   }
 }

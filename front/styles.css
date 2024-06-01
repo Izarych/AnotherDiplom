@@ -21,6 +21,31 @@ h1 {
     font-weight: bold;
 }
 
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.statscont, .container {
+    flex: 1;
+    margin: 10px;
+}
+
+.statscont {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .container {
     max-width: 960px;
     margin: 0 auto;

@@ -7,23 +7,30 @@
 </head>
 <body>
 
-<div class="containerChange">
-  <a href='index.html' id='newpage'>Главная страница</a>
-  <br>
-  <input type="number" id="canId" placeholder="Номер контейнера" min='1'>
-  <br>
-  <input type="number" id="canContent" placeholder="Объем контейнера" min='0' max='8'>
-  <br>
-  <button id="changeBtn">Изменить контейнер</button>
-</div>
-
-<div class='containerDelete'>
-  <input type='number' id='deleteCanId' placeholder='Номер контейнера'>
-  <br>
-  <button id='deleteBtn'>Удалить контейнер</button>
-  <br>
-  <br>
-  <div id='message'></div>
+<a href='index.html' id='newpage'>Главная страница</a>
+<div class="wrapper">
+  <div class="statscont" id="stats">
+    <p>Общая статистика контейнеров</p>
+  </div>
+  <div class="statscont" id="filledContDiv">
+    <p>Информация о заполненных контейнерах</p>
+  </div>
+  <div class="containerChange">
+    <br>
+    <input type="number" id="canId" placeholder="Номер контейнера" min='1'>
+    <br>
+    <input type="number" id="canContent" placeholder="Объем контейнера" min='0' max='8'>
+    <br>
+    <button id="changeBtn">Изменить контейнер</button>
+  </div>
+  <div class='containerDelete'>
+    <input type='number' id='deleteCanId' placeholder='Номер контейнера'>
+    <br>
+    <button id='deleteBtn'>Удалить контейнер</button>
+    <br>
+    <br>
+    <div id='message'></div>
+  </div>
 </div>
 
 <script src="./newpage.js"></script>
